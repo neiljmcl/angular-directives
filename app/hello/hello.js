@@ -2,9 +2,15 @@
 
 
 angular.module('myApp.hello', [])
-  .directive('hello', function() {
+  .directive('hello', ['Salutation', function(salutation) {
     return {
-      template: '<h1>hello there ted</h1>'
+      scope: {},
+      bindToController: true,
+      controllerAs: 'ctrl',
+      controller: [function() {
+        this.greeting = salutation;
+      }],
+      template: '<h1>{{ctrl.greeting}} ted</h1>'
     };
-  })
+  }])
 

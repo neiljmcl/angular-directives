@@ -7,7 +7,16 @@ angular.module('myApp', [
   'myApp.view2',
   'myApp.version',
   'myApp.hello'
-]).
-config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/view1'});
-}]);
+])
+  .config(['$routeProvider', function($routeProvider) {
+    $routeProvider.otherwise({redirectTo: '/view1'});
+  }])
+
+  .factory('GreetingsService', function() {
+    return {
+      sayHello: function() {
+        return "Zdravo";
+      }
+    }
+  })
+  .value('Salutation', "Zdravi");
