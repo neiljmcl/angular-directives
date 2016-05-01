@@ -11,12 +11,3 @@ angular.module('myApp', [
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/view1'});
   }])
-
-  .factory('GreetingsService', function() {
-    return {
-      sayHello: function() {
-        return "Zdravo";
-      }
-    }
-  })
-  .value('Salutation', "Zdravi");

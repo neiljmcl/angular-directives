@@ -16,15 +16,20 @@ describe('myApp.hello module', function() {
     });
   });
 
-  describe('overriding the Salutation for our directive test', function() {
+  describe('overriding the Salutation and/or GreetingsService for our directive test', function() {
     it('uses the overridden salutation', function() {
       module(function($provide) {
         $provide.value('Salutation', "Hello there");
+        $provide.value('GreetingsService', {
+          sayHello: function() {
+            return "Bugger off";
+          }
+        });
       });
-      inject(function(Salutation, $compile, $rootScope) {
+      inject(function($compile, $rootScope) {
         var element = $compile('<hello></hello>')($rootScope);
         $rootScope.$digest();
-        expect(element.text()).toBe("Hello there ted");
+        expect(element.text()).toBe("Bugger off ted");
       });
     });
   });

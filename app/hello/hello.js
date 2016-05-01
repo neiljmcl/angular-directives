@@ -2,13 +2,21 @@
 
 
 angular.module('myApp.hello', [])
-  .directive('hello', ['Salutation', function(salutation) {
+  .factory('GreetingsService', function() {
+    return {
+      sayHello: function() {
+        return "Zdravo";
+      }
+    }
+  })
+  .value('Salutation', "Zdravi")
+  .directive('hello', ['GreetingsService', function(greetingsService) {
     return {
       scope: {},
       bindToController: true,
       controllerAs: 'ctrl',
       controller: [function() {
-        this.greeting = salutation;
+        this.greeting = greetingsService.sayHello();
       }],
       template: '<h1>{{ctrl.greeting}} ted</h1>'
     };
