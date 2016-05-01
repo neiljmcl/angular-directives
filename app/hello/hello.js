@@ -5,11 +5,11 @@ angular.module('myApp.hello', [])
   .factory('GreetingsService', function() {
     return {
       sayHello: function() {
-        return "Zdravo";
+        return "Hello there";
       }
     }
   })
-  .value('Salutation', "Zdravi")
+  .value('Salutation', "Zdravo")
   .directive('hello', ['GreetingsService', function(greetingsService) {
     return {
       scope: {},
