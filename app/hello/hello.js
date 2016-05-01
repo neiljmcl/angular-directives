@@ -2,13 +2,15 @@
 
 
 angular.module('myApp.hello', [])
-  .factory('GreetingsService', function() {
+  .factory('GreetingsService', ['$q', function($q) {
     return {
       sayHello: function() {
-        return "Hello there";
+        var deferred = $q.defer();
+        deferred.resolve("Hello there")
+        return deferred.promise;
       }
     }
-  })
+  }])
   .value('Salutation', "Zdravo")
   .directive('hello', ['GreetingsService', function(greetingsService) {
     return {
@@ -16,7 +18,14 @@ angular.module('myApp.hello', [])
       bindToController: true,
       controllerAs: 'ctrl',
       controller: [function() {
-        this.greeting = greetingsService.sayHello();
+
+        var ctrl = this;
+        greetingsService.sayHello()
+          .then(function(msg) {
+            ctrl.greeting = msg;
+          }).catch(function() {
+            ctrl.greeting = "Careful now";
+          })
       }],
       template: '<h1>{{ctrl.greeting}} ted</h1>'
     };
