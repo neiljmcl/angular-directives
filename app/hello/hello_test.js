@@ -5,63 +5,23 @@ describe('myApp.hello module', function() {
   var $rootScope;
   beforeEach(module('myApp.hello'));
 
-  describe('overriding the Salutation within this test suite', function() {
-    it('says feck off!', function() {
-      module(function($provide) {
-        $provide.value('Salutation', "Feck off");
-      });
-      inject(function(Salutation) {
-        expect(Salutation).toBe("Feck off");
-      });
-    });
-  });
+  beforeEach(inject(function(_$compile_, _$rootScope_, GreetingsService) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    GreetingsService.sayHello = function() {return "Bugger off"};
+  }));
 
-  describe('overriding the Salutation and/or GreetingsService for our directive test', function() {
-    it('uses the overridden salutation', function() {
-      module(function($provide) {
-        $provide.value('Salutation', "Hello there");
-        $provide.value('GreetingsService', {
-          sayHello: function() {
-            return "Bugger off";
-          }
-        });
-      });
-      inject(function($compile, $rootScope) {
-        var element = $compile('<hello></hello>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe("Bugger off ted");
-      });
-    });
-  });
-
-  describe('overriding the GreetingsService within this test suite', function() {
-    it ('speaks russian', function() {
-      module(function($provide) {
-        $provide.value('GreetingsService', {
-          sayHello: function() {
-            return "Bugger off";
-          }
-        });
-      });
+  describe('hello directive', function() {
+    it('should inject the modified service', function() {
       inject(function(GreetingsService) {
         expect(GreetingsService).toBeDefined();
         expect(GreetingsService.sayHello()).toBe("Bugger off");
       });
     });
-  })
-
-  xdescribe('hello directive', function() {
-
-    xit ('should provide a salutation', function() {
-      inject(function(Salutation) {
-        expect(Salutation).toBe("Feck off");
-      })
-    });
-    xit('should say hello to ted', function() {
+    it('should say hello to ted', function() {
       var element = $compile('<hello></hello>')($rootScope);
-      expect(element.text()).toBe("hello there ted");
+      $rootScope.$digest();
+      expect(element.text()).toBe("Bugger off ted");
     });
   });
-
-
 });
