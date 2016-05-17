@@ -30,4 +30,18 @@ angular.module('myApp.hello', [])
       templateUrl: 'hello/hello.html'
     };
   }])
+  .directive('myButtonator', ['GreetingsService', '$log', function(greetingsService, $log) {
+    return {
+      scope: {},
+      bindToController: true,
+      controllerAs: 'ctrl',
+      controller: [function() {
+        var ctrl = this;
+        ctrl.drink = function() {
+          $log.info("Drink! Bring me a fecking drink");
+        };
+      }],
+      templateUrl: 'hello/my-buttonator.html'
+    };
+  }])
 
