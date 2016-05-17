@@ -44,11 +44,11 @@ Now browse to the app at `http://localhost:8000/app/index.html`.
 
 ### Test Scenarios
 
-- ~A trivial directive test (no injected service; no external template)~
-- ~A basic directive test with injected service call~
-- ~A basic directive test with external template~
+- ~~A trivial directive test (no injected service; no external template)~~ Complete
+- ~~A basic directive test with injected service call~~ Complete
+- ~~A basic directive test with external template~~ Complete
 - Behaviour tests: checking behaviour on button click
--- ~Directive controller is called when button clicked~
+-- ~~Directive controller is called when button clicked~~ Complete
 -- Directive controller forwards call to a service (using a spy)
 - Behaviour tests: checking behaviour on forms
 -- Basic form behaviour
