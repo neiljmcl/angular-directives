@@ -8,6 +8,9 @@ angular.module('myApp.hello', [])
         var deferred = $q.defer();
         deferred.resolve("Hello there")
         return deferred.promise;
+      },
+      getDrink: function(s) {
+
       }
     }
   }])
@@ -38,7 +41,7 @@ angular.module('myApp.hello', [])
       controller: [function() {
         var ctrl = this;
         ctrl.drink = function() {
-          $log.info("Drink! Bring me a fecking drink");
+          greetingsService.getDrink("Bring me a fecking drink");
         };
       }],
       templateUrl: 'hello/my-buttonator.html'

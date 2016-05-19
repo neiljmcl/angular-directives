@@ -49,7 +49,7 @@ Now browse to the app at `http://localhost:8000/app/index.html`.
 - ~~A basic directive test with external template~~ Complete
 - Behaviour tests: checking behaviour on button click
 -- ~~Directive controller is called when button clicked~~ Complete
--- Directive controller forwards call to a service (using a spy)
+-- ~~Directive controller forwards call to a service (using a spy)~~
 - Behaviour tests: checking behaviour on forms
 -- Basic form behaviour
 -- form validation
