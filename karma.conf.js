@@ -3,7 +3,7 @@ module.exports = function(config){
     basePath : './',
 
     preprocessors: {
-      'app/hello/*.html': ['ng-html2js']
+      'app/craggy_island/*.html': ['ng-html2js']
     },
 
     files : [
@@ -11,10 +11,8 @@ module.exports = function(config){
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/components/**/*.js',
-      'app/view*/**/*.js',
-      'app/hello/*.js',
-      'app/hello/*.html'
+      'app/craggy_island/*.js',
+      'app/craggy_island/*.html'
     ],
 
 
