@@ -162,6 +162,11 @@ describe('myApp.craggy_island module', function() {
         it('has an input for name', function() {
           expect(accommodationForm.find("input[type='text'][name='name']").length).toBe(1);
         });
+        it('accepts input', function() {
+          var nameInput = accommodationForm.find("input[type='text'][name='name']")
+          nameInput.val('dora bunner').trigger('input');
+          expect(controller.name).toBe("Mrs Blackley");
+        });
       });
     });
 
