@@ -61,6 +61,9 @@ describe('myApp.craggy_island module', function() {
     it('should contain inhabitants directive', function() {
       expect(element.find('craggy-island-inhabitants').length).toBe(1);
     });
+    it('should contain a find-accommodation component', function() {
+      expect(element.find('craggy-island-find-accommodation').length).toBe(1);
+    });
 
     describe('directions [to craggy island]', function() {
       var directionsControl;
@@ -134,10 +137,35 @@ describe('myApp.craggy_island module', function() {
       it('contains Fr Ted', function() {
         expect(element.find('craggy-island-inhabitants ul li').text()).toContain("Fr Dougal");
       });
-
+    });
+    describe('the accommodation component', function() {
+      var accommodationComponent;
+      var controller;
+      beforeEach(function() {
+        accommodationComponent = element.find('craggy-island-find-accommodation');
+        controller = accommodationComponent.controller('craggy-island-find-accommodation');
+      });
+      it('has correct title', function() {
+        expect(accommodationComponent.find('h2').text()).toBe("Find Accommodation: Sure what's not to like?");
+      });
+      it('has a controller', function() {
+        expect(controller).toBeDefined();
+      });
+      it('contains a form', function() {
+        expect(accommodationComponent.find('form').length).toBe(1);
+      });
+      describe('the accommodation form', function() {
+        var accommodationForm;
+        beforeEach(function() {
+          accommodationForm = accommodationComponent.find('form');
+        });
+        it('has an input for name', function() {
+          expect(accommodationForm.find("input[type='text'][name='name']").length).toBe(1);
+        });
+      });
     });
 
-    it('should greet ted appropriately even when there is a service error', function() {
+    it('should display introduction message even when there is a service error', function() {
       var craggyIslandService;
       inject(function(CraggyIslandService, $q) {
         craggyIslandService = CraggyIslandService;
