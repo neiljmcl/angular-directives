@@ -51,11 +51,11 @@ describe('myApp.craggy_island module', function() {
       expect(element.find('img').attr('alt')).toBe('tourist office');
     });
     it('should contain a subdirective', function() {
-      expect(element.find('directions').length).toBe(1);
+      expect(element.find('craggy-island-directions').length).toBe(1);
     });
 
     it('should contain directions directive', function() {
-      expect(element.find('directions').length).toBe(1);
+      expect(element.find('craggy-island-directions').length).toBe(1);
     });
 
     it('should contain inhabitants directive', function() {
@@ -76,8 +76,8 @@ describe('myApp.craggy_island module', function() {
         };
         spyOn(craggyIslandService, 'getDirections').and.callThrough();
 
-        directionsControl = element.find('directions');
-        controller = directionsControl.controller('directions');
+        directionsControl = element.find('craggy-island-directions');
+        controller = directionsControl.controller('craggy-island-directions');
         spyOn(controller, 'showDirections').and.callThrough();
       });
       afterEach(function() {
@@ -164,8 +164,8 @@ describe('myApp.craggy_island module', function() {
         });
         it('accepts input', function() {
           var nameInput = accommodationForm.find("input[type='text'][name='name']")
-          nameInput.val('dora bunner').trigger('input');
-          expect(controller.name).toBe("Mrs Blackley");
+          nameInput.val('Dora Bunner').trigger('input');
+          expect(controller.name).toBe("Dora Bunner");
         });
       });
     });

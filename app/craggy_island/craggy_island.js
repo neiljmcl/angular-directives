@@ -46,7 +46,7 @@ angular.module('myApp.hello', ['ngRoute'])
       templateUrl: 'craggy_island/craggy_island.html'
     };
   }])
-  .directive('directions', ['CraggyIslandService', '$log', function(craggyIslandService, $log) {
+  .directive('craggyIslandDirections', ['CraggyIslandService', '$log', function(craggyIslandService, $log) {
     return {
       scope: {},
       bindToController: true,
