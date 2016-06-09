@@ -5,6 +5,7 @@ describe('myApp.craggy_island module', function() {
   var $rootScope;
   var $q;
   var craggyIslandService;
+  var $window;
 
   beforeEach(module('app.templates'));
   beforeEach(function() {
@@ -13,11 +14,13 @@ describe('myApp.craggy_island module', function() {
     craggyIslandService.getDirections.and.callThrough();
     module('myApp.hello', function($provide) {
       $provide.value('CraggyIslandService', craggyIslandService);
+      // $provide.value('$window', $window);
     });
-    inject(function(_$compile_, _$rootScope_, _$q_) {
+    inject(function(_$compile_, _$rootScope_, _$q_, _$window_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $q = _$q_;
+      $window = _$window_;
     });
   });
 
@@ -75,6 +78,7 @@ describe('myApp.craggy_island module', function() {
           return deferred.promise;
         };
         spyOn(craggyIslandService, 'getDirections').and.callThrough();
+        spyOn($window, 'confirm');
 
         directionsControl = element.find('craggy-island-directions');
         controller = directionsControl.controller('craggy-island-directions');
@@ -84,7 +88,7 @@ describe('myApp.craggy_island module', function() {
         craggyIslandService.getDirections.calls.reset();
       });
 
-      it('contains a warning message', function() {
+      xit('contains a warning message', function() {
         expect(directionsControl.find('span.warning').text()).toBe("As a general rule, if you're going away from the island, you're going in the right direction");
       });
 
@@ -92,13 +96,25 @@ describe('myApp.craggy_island module', function() {
         expect(directionsControl.find('button').text()).toBe("Get Directions");
       });
 
-      it('calls the controller#showDirections method when pressed', function() {
+      it('brings up a warning when pressed', function() {
         var button = directionsControl.find('button');
         button.triggerHandler('click');
         expect(controller.showDirections).toHaveBeenCalled();
       });
 
+      it('calls the controller#showDirections method when pressed', function() {
+        var button = directionsControl.find('button');
+        button.triggerHandler('click');
+        expect(controller.showDirections).toHaveBeenCalled();
+      });
+      it('calls the $window.confirm method when pressed', function() {
+        var button = directionsControl.find('button');
+        button.triggerHandler('click');
+        expect($window.confirm).toHaveBeenCalled();
+      });
+
       it('calls service#getDirections in response to controller#showDirections', function() {
+        $window.confirm.and.returnValue(true);
         controller.showDirections();
         expect(craggyIslandService.getDirections).toHaveBeenCalled();
       });
@@ -106,6 +122,7 @@ describe('myApp.craggy_island module', function() {
         expect(controller.directions).not.toBeDefined();
       });
       it('does expose directions subsequent to a call to showDirections', function() {
+        $window.confirm.and.returnValue(true);
         controller.showDirections();
         $rootScope.$digest();
         expect(controller.directions).toBe("Don't bother your arse");
