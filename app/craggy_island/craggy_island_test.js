@@ -5,6 +5,7 @@ describe('myApp.craggy_island module', function() {
   var $rootScope;
   var $q;
   var craggyIslandService;
+  var $window;
 
   beforeEach(module('app.templates'));
   beforeEach(function() {
@@ -13,11 +14,13 @@ describe('myApp.craggy_island module', function() {
     craggyIslandService.getDirections.and.callThrough();
     module('myApp.hello', function($provide) {
       $provide.value('CraggyIslandService', craggyIslandService);
+      // $provide.value('$window', $window);
     });
-    inject(function(_$compile_, _$rootScope_, _$q_) {
+    inject(function(_$compile_, _$rootScope_, _$q_, _$window_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $q = _$q_;
+      $window = _$window_;
     });
   });
 
@@ -51,15 +54,18 @@ describe('myApp.craggy_island module', function() {
       expect(element.find('img').attr('alt')).toBe('tourist office');
     });
     it('should contain a subdirective', function() {
-      expect(element.find('directions').length).toBe(1);
+      expect(element.find('craggy-island-directions').length).toBe(1);
     });
 
     it('should contain directions directive', function() {
-      expect(element.find('directions').length).toBe(1);
+      expect(element.find('craggy-island-directions').length).toBe(1);
     });
 
     it('should contain inhabitants directive', function() {
       expect(element.find('craggy-island-inhabitants').length).toBe(1);
+    });
+    it('should contain a find-accommodation component', function() {
+      expect(element.find('craggy-island-find-accommodation').length).toBe(1);
     });
 
     describe('directions [to craggy island]', function() {
@@ -72,16 +78,17 @@ describe('myApp.craggy_island module', function() {
           return deferred.promise;
         };
         spyOn(craggyIslandService, 'getDirections').and.callThrough();
+        spyOn($window, 'confirm');
 
-        directionsControl = element.find('directions');
-        controller = directionsControl.controller('directions');
+        directionsControl = element.find('craggy-island-directions');
+        controller = directionsControl.controller('craggy-island-directions');
         spyOn(controller, 'showDirections').and.callThrough();
       });
       afterEach(function() {
         craggyIslandService.getDirections.calls.reset();
       });
 
-      it('contains a warning message', function() {
+      xit('contains a warning message', function() {
         expect(directionsControl.find('span.warning').text()).toBe("As a general rule, if you're going away from the island, you're going in the right direction");
       });
 
@@ -89,13 +96,25 @@ describe('myApp.craggy_island module', function() {
         expect(directionsControl.find('button').text()).toBe("Get Directions");
       });
 
-      it('calls the controller#showDirections method when pressed', function() {
+      it('brings up a warning when pressed', function() {
         var button = directionsControl.find('button');
         button.triggerHandler('click');
         expect(controller.showDirections).toHaveBeenCalled();
       });
 
+      it('calls the controller#showDirections method when pressed', function() {
+        var button = directionsControl.find('button');
+        button.triggerHandler('click');
+        expect(controller.showDirections).toHaveBeenCalled();
+      });
+      it('calls the $window.confirm method when pressed', function() {
+        var button = directionsControl.find('button');
+        button.triggerHandler('click');
+        expect($window.confirm).toHaveBeenCalled();
+      });
+
       it('calls service#getDirections in response to controller#showDirections', function() {
+        $window.confirm.and.returnValue(true);
         controller.showDirections();
         expect(craggyIslandService.getDirections).toHaveBeenCalled();
       });
@@ -103,6 +122,7 @@ describe('myApp.craggy_island module', function() {
         expect(controller.directions).not.toBeDefined();
       });
       it('does expose directions subsequent to a call to showDirections', function() {
+        $window.confirm.and.returnValue(true);
         controller.showDirections();
         $rootScope.$digest();
         expect(controller.directions).toBe("Don't bother your arse");
@@ -134,10 +154,40 @@ describe('myApp.craggy_island module', function() {
       it('contains Fr Ted', function() {
         expect(element.find('craggy-island-inhabitants ul li').text()).toContain("Fr Dougal");
       });
-
+    });
+    describe('the accommodation component', function() {
+      var accommodationComponent;
+      var controller;
+      beforeEach(function() {
+        accommodationComponent = element.find('craggy-island-find-accommodation');
+        controller = accommodationComponent.controller('craggy-island-find-accommodation');
+      });
+      it('has correct title', function() {
+        expect(accommodationComponent.find('h2').text()).toBe("Find Accommodation: Sure what's not to like?");
+      });
+      it('has a controller', function() {
+        expect(controller).toBeDefined();
+      });
+      it('contains a form', function() {
+        expect(accommodationComponent.find('form').length).toBe(1);
+      });
+      describe('the accommodation form', function() {
+        var accommodationForm;
+        beforeEach(function() {
+          accommodationForm = accommodationComponent.find('form');
+        });
+        it('has an input for name', function() {
+          expect(accommodationForm.find("input[type='text'][name='name']").length).toBe(1);
+        });
+        it('accepts input', function() {
+          var nameInput = accommodationForm.find("input[type='text'][name='name']")
+          nameInput.val('Dora Bunner').trigger('input');
+          expect(controller.name).toBe("Dora Bunner");
+        });
+      });
     });
 
-    it('should greet ted appropriately even when there is a service error', function() {
+    it('should display introduction message even when there is a service error', function() {
       var craggyIslandService;
       inject(function(CraggyIslandService, $q) {
         craggyIslandService = CraggyIslandService;

@@ -12,6 +12,9 @@ angular.module('myApp.hello', ['ngRoute'])
       return deferred.promise;
     }
     return {
+      getDirectionsWarning: function() {
+        return $q.resolve("")
+      },
       getDirections: function() {
         return deferredMessage("It wouldn't be on any maps. We're not exactly New York! " +
           "No, the best way to find it is to head out from Galway and go slightly north until you see the English boats with the nuclear symbol. " +
@@ -22,6 +25,9 @@ angular.module('myApp.hello', ['ngRoute'])
       },
       getDrink: function(s) {
         console.log("Drink!");
+      },
+      searchForAccommodation: function(accommodationDetails) {
+        console.log("Search for accommodation for ", accommodationDetails.name , " and", accommodationDetails.address);
       }
     }
   }])
@@ -43,7 +49,7 @@ angular.module('myApp.hello', ['ngRoute'])
       templateUrl: 'craggy_island/craggy_island.html'
     };
   }])
-  .directive('directions', ['CraggyIslandService', '$log', function(craggyIslandService, $log) {
+  .directive('craggyIslandDirections', ['CraggyIslandService', '$log', '$window', function(craggyIslandService, $log, $window) {
     return {
       scope: {},
       bindToController: true,
@@ -52,14 +58,20 @@ angular.module('myApp.hello', ['ngRoute'])
         var ctrl = this;
         ctrl.showDirections = function () {
           if (angular.isUndefined(ctrl.directions)) {
-            craggyIslandService.getDirections().then(function(directions) {
-              ctrl.directions = directions;
-            }).catch(function() {
-              ctrl.directions = "Try again later"
-            })
+            var confirmed = $window.confirm("As a general rule, if you're going away from the island,you're going in the right direction");
+            if (confirmed) {
+              craggyIslandService.getDirections().then(function (directions) {
+                ctrl.directions = directions;
+              }).catch(function () {
+                ctrl.directions = "Try again later"
+              })
+            }
           } else {
             ctrl.directions = undefined;
           }
+        };
+        ctrl.warning = function() {
+
         };
       }],
       templateUrl: 'craggy_island/directions.html'
@@ -74,6 +86,24 @@ angular.module('myApp.hello', ['ngRoute'])
         var ctrl = this;
       }],
       templateUrl: 'craggy_island/inhabitants.html'
+    };
+  }])
+  .directive('craggyIslandFindAccommodation', ['CraggyIslandService', '$log', function(craggyIslandService, $log) {
+    return {
+      scope: {},
+      bindToController: true,
+      controllerAs: 'ctrl',
+      controller: [function () {
+        var ctrl = this;
+        ctrl.reset = function() {
+          $log.info("Resetting form", ctrl);
+        };
+        ctrl.submit = function() {
+          craggyIslandService.searchForAccommodation({name: ctrl.name, address: ctrl.address})
+        };
+
+      }],
+      templateUrl: 'craggy_island/find_accommodation.html'
     };
   }]);
 
